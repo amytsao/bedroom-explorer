@@ -17,7 +17,6 @@ export function createBedroomGame(canvas) {
     scene: [BedroomScene],
     callbacks: {
       postBoot(game) {
-        game.canvas.style.width = "100%";
         game.canvas.style.height = "auto";
       },
     },

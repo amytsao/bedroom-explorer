@@ -97,14 +97,16 @@ button:focus-visible, summary:focus-visible { outline: 3px solid var(--focus); o
   box-shadow: 0 10px 0 rgba(84,103,86,.13), 0 18px 35px var(--shadow);
   overflow: hidden;
   touch-action: none;
+  min-width: 0;
 }
-canvas {
+#gameViewport {
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 1;
+  height: 320px;
+  overflow: hidden;
+}
+#game {
   display: block;
   image-rendering: pixelated;
-  image-rendering: crisp-edges;
 }
 .world-label {
   position: absolute;
