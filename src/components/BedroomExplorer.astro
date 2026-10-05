@@ -1,0 +1,33 @@
+---
+import { GAME_CONFIG, HOTSPOT_DEFINITIONS } from "../scripts/scene.js";
+---
+<main>
+    <div class="toolbar">
+      <div class="hint"><span class="key desktop-only">A D</span><span class="key desktop-only">← →</span><span> to move</span></div>
+    </div>
+
+    <section class="game-shell" id="gameShell" aria-label="Walk left and right to inspect objects.">
+      <canvas id="game" width={GAME_CONFIG.viewportWidth} height={GAME_CONFIG.viewportHeight} style={`aspect-ratio: ${GAME_CONFIG.viewportWidth} / ${GAME_CONFIG.viewportHeight}`} role="img" aria-label="Pixel-art bedroom exploration area. Use the movement controls to approach glowing objects and inspect them.">Your browser does not support the canvas element.</canvas>
+      <div class="world-label" id="worldLabel" hidden>SPACE · inspect</div>
+    </section>
+
+    <section class="dialog" id="dialog" aria-label="Object description" aria-live="polite" aria-atomic="true">
+      <h1 id="dialogTitle">Just a normal bedroom.</h1>
+      <p id="dialogText">Take a look around?</p>
+    </section>
+
+    <div class="touch" aria-label="Touch movement controls">
+      <button class="left" data-key="ArrowLeft" type="button" aria-label="Walk left">←</button>
+      <button class="right" data-key="ArrowRight" type="button" aria-label="Walk right">→</button>
+      <button class="inspect" id="inspectBtn" type="button">LOOK</button>
+    </div>
+
+    <div class="explore-status">
+      <span><strong id="foundCount">0</strong> of <strong id="totalCount">{HOTSPOT_DEFINITIONS.length}</strong> discoveries</span>
+      <progress id="progress" value="0" max={HOTSPOT_DEFINITIONS.length} aria-label="Discovery progress"></progress>
+    </div>
+  </main>
+
+<script>
+  import "../scripts/game.js";
+</script>
