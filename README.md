@@ -34,7 +34,7 @@ Production output is generated in `dist/` for static hosting. Phaser is bundled 
 | `src/scripts/palette.js` | Shared 31-color palette and runtime texture recoloring |
 | `src/scripts/input.js` | Phaser keyboard events and accessible DOM touch controls, with cleanup |
 | `src/scripts/ui.js` | Dialog, prompts, progress updates |
-| `public/assets/` | Optional custom images |
+| `public/assets/` | Images |
 
 `GAME_CONFIG` controls the world, viewport, floor boundary, player start position, and walking lane. Increase `floorTop` to make the floor shallower. The player's feet are at `playerY + playerFootOffset` (306 by default); adjust the walking lane when changing room height.
 

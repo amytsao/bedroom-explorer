@@ -48,6 +48,7 @@ export const CANVAS_ITEMS = {
     h: 32,
     layer: 41
   },
+
   pictures: {
     src: null,
     x: 330,
@@ -65,11 +66,12 @@ export const CANVAS_ITEMS = {
   bookshelf: {
     src: null,
     x: 920,
-    y: 92,
+    y: 172,
     w: 156,
     h: 192,
     layer: 20
   },
+
   player: {
     src: 'hornet-walking.webp',
     frameWidth: 36, frameHeight: 36, frameCount: 5,

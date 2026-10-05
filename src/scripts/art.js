@@ -71,22 +71,98 @@ export function buildArtTextures(scene, darkMode) {
     px(0, H - 18, W, 18, floorShade);
   }
 
-  function drawBookshelfFallback(item) {
-    var x = item.x + 5, y = item.y;
-    box(x, y, 152, 334, '#713c3c', '#0e292e', 7);
-    for (var sy = 48; sy < 320; sy += 68) px(x + 8, y + sy, 136, 10, '#a55742');
-    var colors = ['#dd6c50', '#e7ae56', '#4f9c94', '#c95068', '#e1d078', '#6c78a1'], idx = 0;
-    for (var row = 0; row < 4; row++) {
-      var bx = x + 14;
-      for (var j = 0; j < 6; j++) {
-        var bw = 13 + (j % 3) * 3, bh = 31 + (j % 2) * 11;
-        px(bx, y + 46 + row * 68 - bh, bw, bh, colors[idx++ % colors.length]); px(bx + 3, y + 49 + row * 68 - bh, 2, bh - 6, 'rgba(255,255,255,.28)');
-        bx += bw + 5;
-      }
-    }
-    px(x - 5, y + 328, 162, 14, '#4e3237');
+  function drawBookshelf(item) {
+  const { x, y } = item;
+
+  const top = PALETTE[23];
+  const frame = PALETTE[24];
+  const shade = PALETTE[25];
+  const side = PALETTE[26];
+  const back = PALETTE[0];
+  const recess = PALETTE[7];
+  const paper = PALETTE[13];
+
+  const bookColors = [
+    PALETTE[5],
+    PALETTE[27],
+    PALETTE[16],
+    PALETTE[11],
+    PALETTE[8],
+    PALETTE[21],
+  ];
+
+  const width = 132;
+  const height = 194;
+  const depth = 8;
+  const cell = 54;
+  const board = 8;
+  const pitch = cell + board;
+
+  // Top and right side, drawn behind the front.
+  // Stepped rows preserve the pixel-art edges.
+  for (let step = depth; step >= 1; step--) {
+    px(x + step, y - step, width, 1, top);
+    px(x + width + step - 1, y - step, 1, height, side);
   }
-  function drawPicturesFallback(item) {
+
+  // Back edge of the top surface.
+  px(x + depth, y - depth, width, 1, shade);
+
+  // Front frame.
+  px(x, y, width, height, side);
+  px(x + 1, y + 1, width - 2, height - 2, frame);
+  px(x + 1, y + 1, width - 2, 2, top);
+  px(x + width - 3, y + 2, 2, height - 4, shade);
+  px(x + 2, y + height - 4, width - 4, 3, shade);
+
+  for (let row = 0; row < 3; row++) {
+    for (let column = 0; column < 2; column++) {
+      const cx = x + board + column * pitch;
+      const cy = y + board + row * pitch;
+      const base = cy + cell - 5;
+      const index = row * 2 + column;
+
+      // Recessed interior: dark top/left, visible right wall and floor.
+      px(cx, cy, cell, cell, recess);
+      px(cx + 4, cy + 4, cell - 8, cell - 8, back);
+      px(cx + cell - 4, cy + 4, 4, cell - 4, PALETTE[1]);
+      px(cx + 4, cy + cell - 4, cell - 4, 4, shade);
+
+      if (index === 1 || index === 4) {
+        // Horizontal book stacks.
+        for (let book = 0; book < 3; book++) {
+          const bookWidth = 30 + ((book + index) % 3) * 4;
+          const bx = cx + 5 + (book % 2) * 3;
+          const by = base - (book + 1) * 7;
+          const color = bookColors[(index + book) % bookColors.length];
+
+          px(bx, by, bookWidth, 6, color);
+          px(bx + 2, by + 2, bookWidth - 4, 2, paper);
+        }
+      } else {
+        // Upright books.
+        let bx = cx + 5;
+        const count = index === 3 ? 4 : 5;
+
+        for (let book = 0; book < count; book++) {
+          const bookWidth = 6 + ((book + index) % 3);
+          const bookHeight = 26 + ((book * 3 + index) % 5) * 4;
+          const color = bookColors[(index + book) % bookColors.length];
+
+          px(bx, base - bookHeight, bookWidth, bookHeight, color);
+          px(bx + 1, base - bookHeight + 2, 1, bookHeight - 4, paper);
+          px(bx + 2, base - 7, bookWidth - 3, 2, paper);
+
+          bx += bookWidth + 1;
+        }
+      }
+
+      // Highlight the front edge of each shelf.
+      px(cx, cy + cell, cell, 2, top);
+    }
+  }
+}
+  function drawPictures(item) {
     const { x, y } = item;
 
     const colors = {
@@ -148,8 +224,8 @@ export function buildArtTextures(scene, darkMode) {
   }
 
   const ITEM_DRAWERS = {
-    pictures: drawPicturesFallback,
-    bookshelf: drawBookshelfFallback,
+    pictures: drawPictures,
+    bookshelf: drawBookshelf,
   };
 
   paint("room-background", W, H, 0, 0, drawRoomBackground);
